@@ -12,9 +12,11 @@ import os
 import smtplib
 from email.message import EmailMessage
 from fpdf import FPDF
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 st.set_page_config(page_title="RAG File Processor", layout="wide")
-
 st.title("📁 AI Document Processor + Email Sender")
 st.markdown("Upload a CSV or Excel file, ask a question, and get a new file emailed and downloadable.")
 
@@ -73,11 +75,7 @@ def process_file(file, file_type, prompt, api_key, format):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=12)
-        pdf.multi_cell(0, 10, f"""Prompt:
-{prompt}
-
-Answer:
-{answer}""")
+        pdf.multi_cell(0, 10, f"""Prompt:\n{prompt}\n\nAnswer:\n{answer}""")
         pdf.output(output_filename)
 
     return output_filename, answer
@@ -90,12 +88,7 @@ def send_email(recipient_email, file_path):
     msg.set_content("Please find the processed file attached.")
 
     with open(file_path, "rb") as f:
-        msg.add_attachment(
-            f.read(),
-            maintype="application",
-            subtype="octet-stream",
-            filename=os.path.basename(file_path)
-        )
+        msg.add_attachment(f.read(), maintype="application", subtype="octet-stream", filename=os.path.basename(file_path))
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login("bhanuprakash6841@gmail.com", "Immanni@2204")
@@ -116,9 +109,13 @@ if process_button:
                 file_type = uploaded_file.name.split(".")[-1]
                 file_path, result = process_file(uploaded_file, file_type, prompt, api_key, file_format)
                 send_email(email, file_path)
-                st.success(f"✅ Done! Answer: {result}")
-                st.success(f"📧 File emailed to: {email}")
+                logging.info("✅ File processed and emailed successfully.")
+                st.success("✅ File processed and emailed!")
+                with st.expander("📄 View Answer"):
+                    st.markdown(f"**Prompt:** {prompt}")
+                    st.markdown(f"**Answer:** {result}")
                 with open(file_path, "rb") as f:
                     st.download_button("⬇️ Download File", data=f, file_name=file_path)
             except Exception as e:
+                logging.error("❌ Error during processing", exc_info=True)
                 st.error(f"❌ Error: {str(e)}")
