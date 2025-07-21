@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 from langchain.document_loaders import CSVLoader
@@ -74,13 +73,12 @@ def process_file(file, file_type, prompt, api_key, format):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=12)
-pdf.multi_cell(0, 10, f"""Prompt:
+        pdf.multi_cell(0, 10, f"""Prompt:
 {prompt}
 
 Answer:
 {answer}""")
-
-pdf.output(output_filename)
+        pdf.output(output_filename)
 
     return output_filename, answer
 
@@ -92,7 +90,12 @@ def send_email(recipient_email, file_path):
     msg.set_content("Please find the processed file attached.")
 
     with open(file_path, "rb") as f:
-        msg.add_attachment(f.read(), maintype="application", subtype="octet-stream", filename=os.path.basename(file_path))
+        msg.add_attachment(
+            f.read(),
+            maintype="application",
+            subtype="octet-stream",
+            filename=os.path.basename(file_path)
+        )
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login("bhanuprakash6841@gmail.com", "Immanni@2204")
