@@ -1,8 +1,10 @@
 streamlit
 pandas
 openai
-langchain==0.0.330
-tiktoken
+langchain==0.0.310
 faiss-cpu
-openpyxl
-fpdf
+python-docx
+python-pptx
+PyPDF2
+reportlab
+email-validator
