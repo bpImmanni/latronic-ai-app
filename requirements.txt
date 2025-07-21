@@ -1,10 +1,6 @@
 streamlit
 pandas
 openai
-langchain==0.0.310
-faiss-cpu
-python-docx
-python-pptx
-PyPDF2
-reportlab
+langchain==0.1.13
+fpdf
 email-validator
