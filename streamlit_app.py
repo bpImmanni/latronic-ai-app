@@ -80,7 +80,7 @@ pdf.multi_cell(0, 10, f"""Prompt:
 Answer:
 {answer}""")
 
-        pdf.output(output_filename)
+pdf.output(output_filename)
 
     return output_filename, answer
 
