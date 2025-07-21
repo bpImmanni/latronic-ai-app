@@ -74,11 +74,12 @@ def process_file(file, file_type, prompt, api_key, format):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=12)
-        pdf.multi_cell(0, 10, f"Prompt:
+pdf.multi_cell(0, 10, f"""Prompt:
 {prompt}
 
 Answer:
-{answer}")
+{answer}""")
+
         pdf.output(output_filename)
 
     return output_filename, answer
@@ -86,7 +87,7 @@ Answer:
 def send_email(recipient_email, file_path):
     msg = EmailMessage()
     msg["Subject"] = "📎 Your Processed File"
-    msg["From"] = "your_email@gmail.com"
+    msg["From"] = "bhanuprakash6841@gmail.com"
     msg["To"] = recipient_email
     msg.set_content("Please find the processed file attached.")
 
@@ -94,7 +95,7 @@ def send_email(recipient_email, file_path):
         msg.add_attachment(f.read(), maintype="application", subtype="octet-stream", filename=os.path.basename(file_path))
 
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login("your_email@gmail.com", "your_app_password_here")
+        smtp.login("bhanuprakash6841@gmail.com", "Immanni@2204")
         smtp.send_message(msg)
 
 if process_button:
